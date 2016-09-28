@@ -11,6 +11,14 @@ import GameplayKit
 
 class ViewController: UITableViewController {
     
+    func startGame(){
+        allWords = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: allWords) as! [String]
+        title = allWords[0]
+        usedWords.removeAll(keepingCapacity: true)
+        tableView.reloadData()
+    }
+    
+    
     var allWords = [String]()
     var usedWords = [String]()
 
@@ -25,8 +33,20 @@ class ViewController: UITableViewController {
                 allWords = ["silkWorm"]
             }
         }
+        
+        startGame()
     }
-
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return usedWords.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Word", for: indexPath)
+        cell.textLabel?.text = usedWords[indexPath.row]
+        return cell
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
